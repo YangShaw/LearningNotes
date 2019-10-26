@@ -39,20 +39,20 @@
 
 - Fork
 
-点击开源项目的fork后，会在个人的github仓库中复制一个同名的开源项目，并会说明fork的源地址以及给出链接。如下所示：
+点击开源项目的fork后，会在个人的github仓库中复制一个同名的开源项目，并会说明fork的源地址以及给出链接。如下所示：\
 ![fork](imgs/fork.jpg)
 - 本地克隆
 
 在本地目录中将【自己fork下来的开源项目】（属于自己的github，而非原项目）克隆到本地：\
 git clone "远程仓库地址"\
 输入指令可以查看当前的仓库情况：\
-git remote -v
+git remote -v\
 ![clone](imgs/clone.png)
 - 关联开源项目
 
 将本地仓库和被fork的开源项目建立连接：\
 git remote add upstream "开源项目地址"\
-这时候再次输入git remote -v，可以查看到所关联的upstream仓库信息
+这时候再次输入git remote -v，可以查看到所关联的upstream仓库信息\
 ![upstream](imgs/upstream.png)
 
 - 分支
@@ -154,6 +154,7 @@ git push –u origin master
 git pull –rebase origin master
 
 - pull和fetch的区别
+
 [![git](imgs/git.jpg)](https://blog.csdn.net/qq_36113598/article/details/78906882)
 
 如图所示，git pull = git fetch + git merge;
