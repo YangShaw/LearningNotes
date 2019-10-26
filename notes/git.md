@@ -36,33 +36,39 @@
 
 
 - Fork
+
 点击开源项目的fork后，会在个人的github仓库中复制一个同名的开源项目，并会说明fork的源地址以及给出链接。如下所示：
 ![fork](imgs/fork.jpg)
 - 本地克隆
-在本地目录中将【自己fork下来的开源项目】（属于自己的github，而非原项目）克隆到本地：
-git clone "远程仓库地址"
-输入指令可以查看当前的仓库情况：
+
+在本地目录中将【自己fork下来的开源项目】（属于自己的github，而非原项目）克隆到本地：\
+git clone "远程仓库地址"\
+输入指令可以查看当前的仓库情况：\
 git remote -v
 ![clone](imgs/clone.png)
 - 关联开源项目
-将本地仓库和被fork的开源项目建立连接：
-git remote add upstream "开源项目地址"
+
+将本地仓库和被fork的开源项目建立连接：\
+git remote add upstream "开源项目地址"\
 这时候再次输入git remote -v，可以查看到所关联的upstream仓库信息
 ![upstream](imgs/upstream.png)
+
 - 分支
-master分支是本地仓库默认创建的主分支，主要用于和远程仓库保持同步；我们对项目进行修改时，最好新建一个子分支(如dev)，在子分支上任意修改后，通过子分支进行add, commit, push。
-新建子分支并跳转：
-git checkout -b dev 或 git switch -c dev
-查看分支列表
-git branch
-分支切换(从当前分支切换到dev分支)
-git checkout dev 或 git switch dev
-合并分支：
-git merge dev
-删除分支：
+
+master分支是本地仓库默认创建的主分支，主要用于和远程仓库保持同步；我们对项目进行修改时，最好新建一个子分支(如dev)，在子分支上任意修改后，通过子分支进行add, commit, push。\
+新建子分支并跳转：\
+git checkout -b dev 或 git switch -c dev\
+查看分支列表\
+git branch\
+分支切换(从当前分支切换到dev分支)\
+git checkout dev 或 git switch dev\
+合并分支：\
+git merge dev\
+删除分支：\
 git branch -d devb
 - 提交PR
-将修改的内容push到自己的远程仓库后，进入自己的GitHub远程仓库，就能够看到提示你可以进行pull request的信息。
+
+将修改的内容push到自己的远程仓库后，进入自己的GitHub远程仓库，就能够看到提示你可以进行pull request的信息。\
 填写相应的PR标题和描述。引用老师给出的提交PR的要求：
 > 1. PR的标题请表达“做了什么”，而不仅仅是“改了一点内容”，甚至更加不知所云的标题
 > 2. PR的说明文字，可以较为明确的介绍为何要这么改，如果仅仅是改了一些错别字，则不必解释更多
@@ -77,52 +83,72 @@ git branch -d devb
 
 
 - 初始化
+
 选择一个文件夹作为本地库的存放位置，在文件夹下右键选择git bash here，打开git的命令行。执行如下命令来初始化一个本地仓库。
+
 git init
 
 - 添加文件
+
 仓库中的内容有更新后，执行如下命令来将更新的文件添加到暂存区。
+
 git add &lt;filename&gt;
+
 如果需要将所有内容都添加：
-git add –A (需要大写)
-或
-git add .
+
+git add –A (需要大写) 或 git add .
 
 - 查看状态
+
 可以不断向暂存区中add文件，当不知道上传的内容后，可以执行如下指令来查看当前暂存区的状态：
+
 git status
 
 - 提交文件
+
 多次将文件add到暂存区后，可以一次性提交到分支：
+
 git commit –m "commit message"
+
 后面附加的是当前提交的说明信息。这个信息很重要，可以帮助识别和区分不同的版本，以及不同提交实现的不同功能等等。最好是能够有一套信息规范。
 
 - 查看日志
+
 日志文件中保存了各个版本提交的信息，使用如下指令来查看日志：
-git log
-或
-git log --oneline 来查看简略日志
+
+git log 或 git log --oneline 来查看简略日志
 
 - SSH加密设置
+
 本地仓库和GitHub上的远程仓库之间信息传输需要通过SSH加密。下面的配置教程主要来自廖雪峰的git教程。
 
 创建SSH Key。
+
 检查用户主目录下是否有.ssh目录以及目录下是否有id_rsa和id_rsa.pub两个文件。前者是私钥，后者是公钥。如果没有，在git bash中执行如下命令：
+
 ssh-keygen –t rsa –C “emailaddress”
+
 后续的存储位置和输入密码只需要用enter跳过，即使用默认位置和不设置密码。
+
 打开GitHub，找到settings-personal settings-SSH and GPG keys目录，新建一个SSH key项，将id_rsa.pub中的内容复制到里面就可以了。
 
 - 创建和绑定远程仓库
+
 首先在github上创建仓库，复制它的SSH地址；
 此时，我们的本地仓库中已经存放了一些文件，但新建的这个位于github上的与之对应的远程仓库还是空的。那么为了实现它们 之间的传输，首先要将两个仓库绑定：
+
 git remote add origin "远程仓库地址"
 
 - 推送更新
+
 之前经过add将更新上传到暂存区，经过commit将更新提交到分支。但这些操作产生的影响都是对本地的，还需要将这些都推送到github上保存下来，需要执行如下指令：
+
 git push –u origin master
+
 其中，-u这个参数是只有初次推送的时候才需要加上的；master是本地分支的名字，origin是远程库的默认名字，并且一般都被用于指代远程库。
 
 但是输入指令后出现了错误。这是因为我们在github上创建repository时一般都会随着库的创建自动生成一个Readme文件。这个文件在本地库中是没有的，所以在将本地信息向远程推送时，必须确保要先把这个文件传送到本地。这个指令也是我们从远程获取更新信息的指令：
+
 git pull –rebase origin master
 
 - pull和fetch的区别
@@ -136,9 +162,13 @@ git pull –rebase origin master
 #### 参考资料
 
 [1] [廖雪峰的git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
+
 [2] [向开源框架提交PR的过程](https://blog.csdn.net/vim_wj/article/details/78300239)
+
 [3] [远程仓库版本回退方法](https://blog.csdn.net/fuchaosz/article/details/52170105)
+
 [4] [git pull与fetch的区别](https://blog.csdn.net/qq_36113598/article/details/78906882)
+
 [5] [多个github账号的SSH key切换](http://ju.outofmemory.cn/entry/143690)
 
 
