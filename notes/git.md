@@ -16,7 +16,7 @@
 - 保持与项目同步：在进行修改和PR之前，要先确保自己的分支与源项目保持同步。我们利用本地仓库中默认的主分支master来和源项目保持同步，在同步完成后新建自己的开发分支（如dev），然后在新建的分支上进行修改。
 
 - 本地修改之前，先看一下自己的远程仓库界面，如果有"This branch is N commits behind xxx"，说明源项目在这段时间已经进行了若干版本的更新，这时候我们首先要在自己的仓库同步这些更新，然后进行修改。
-![commits behind](/imgs/behind.jpg)
+![commits behind](imgs/behind.jpg)
     - 逻辑：本地fetch源项目-本地master分支和fetch到的源项目同步-本地master分支推送到远程仓库
     - 步骤：
     0 git remote add upstream github_address 通过这条指令关联源项目仓库。关联成功后可以使用git remote -v查看到效果。
@@ -37,18 +37,18 @@
 
 - Fork
 点击开源项目的fork后，会在个人的github仓库中复制一个同名的开源项目，并会说明fork的源地址以及给出链接。如下所示：
-![fork](/imgs/fork.jpg)
+![fork](imgs/fork.jpg)
 - 本地克隆
 在本地目录中将【自己fork下来的开源项目】（属于自己的github，而非原项目）克隆到本地：
 git clone "远程仓库地址"
 输入指令可以查看当前的仓库情况：
 git remote -v
-![clone](/imgs/clone.png)
+![clone](imgs/clone.png)
 - 关联开源项目
 将本地仓库和被fork的开源项目建立连接：
 git remote add upstream "开源项目地址"
 这时候再次输入git remote -v，可以查看到所关联的upstream仓库信息
-![upstream](/imgs/upstream.png)
+![upstream](imgs/upstream.png)
 - 分支
 master分支是本地仓库默认创建的主分支，主要用于和远程仓库保持同步；我们对项目进行修改时，最好新建一个子分支(如dev)，在子分支上任意修改后，通过子分支进行add, commit, push。
 新建子分支并跳转：
@@ -94,7 +94,7 @@ git status
 
 - 提交文件
 多次将文件add到暂存区后，可以一次性提交到分支：
-git commit –m “commit message”
+git commit –m "commit message"
 后面附加的是当前提交的说明信息。这个信息很重要，可以帮助识别和区分不同的版本，以及不同提交实现的不同功能等等。最好是能够有一套信息规范。
 
 - 查看日志
@@ -126,7 +126,7 @@ git push –u origin master
 git pull –rebase origin master
 
 - pull和fetch的区别
-[![git](/imgs/git.jpg)](https://blog.csdn.net/qq_36113598/article/details/78906882)
+[![git](imgs/git.jpg)](https://blog.csdn.net/qq_36113598/article/details/78906882)
 
 如图所示，git pull = git fetch + git merge;
 
