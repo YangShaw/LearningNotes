@@ -4,15 +4,20 @@
 
 ---
 **Content**
-
+- [10.30 使用github desktop](#1030-使用github-desktop)
 - [10.25 提交PR过程中遇到的问题和解决方法](#1025-提交PR过程中遇到的问题和解决方法)
 
 - [10.21 Fork&PR](#1021-forkpr)
 - [9.20 Git基本指令](#920-git基本指令)
+- [其他](#其他)
 - [参考资料](#参考资料)
+
 
 ---
 
+## **10.30 使用github desktop**
+
+- github提供了桌面客户端，功能类似于各种IDE中通过图形化界面对项目进行commit和push的那些插件，它用来管理自己的github仓库。可以通过add existing repository将本地已经创建好的仓库(含有git配置信息，进行过git init或git clone)添加到这个客户端，之后就可以在这个图形化界面中查看changed files，查看log history，以及提交commit和push。
 
 
 ## **10.25 提交PR过程中遇到的问题和解决方法**
@@ -163,6 +168,12 @@ git pull –rebase origin master
 如图所示，git pull = git fetch + git merge;
 
 - [有待学习]多个github账号的SSH key切换
+
+## **其他**
+
+1. 在本地用init的方法创建仓库后，使用命令 git remote add origin 远程地址 关联远程仓库。这条指令和后来fork开源项目添加公共仓库的指令 git remote add upstream 开源项目地址 是类似的。这样就理解了remote是关联远程仓库的意思。origin用来标识自己的远程仓库，upstream用来标识fork的项目的源地址。
+
+2. 
 
 
 ## **参考资料**
