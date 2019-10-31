@@ -21,4 +21,4 @@
     - activationEvents表示当前server对应的语言；只要打开一个对应的文件，vs code就启动当前插件。
     - configuration中是在vs code中的一些配置；
 
-- client/src/extension.ts 是
+- client/src/extension.ts 是插件的入口文件。
