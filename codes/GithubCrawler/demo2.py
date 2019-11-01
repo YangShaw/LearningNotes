@@ -6,7 +6,7 @@ import json
 stars_limit = 0
 
 # output file
-output_file_name = "output.json"
+output_file_name = "output.txt"
 
 # request a url and encode the getting json data to python dictionary data
 def request_url(url):
@@ -73,7 +73,7 @@ def visit_all_users():
     all_users.add('YangShaw')
 
     count = 0;
-    while all_users and count<10:
+    while all_users and count<1:
         username = all_users.pop()
         # avoid repeated requests
         if username not in requested_users:
@@ -87,13 +87,21 @@ def visit_all_users():
         else:
             pass
 
+    # print(type(all_repos))
+    # for repo in all_repos.items():
+    #     print(repo)
+
+
     return all_repos
 
-def output_to_file(repos):
+def output_to_file(repos = dict()):
 
-    for repo in repos:
-        print(repo)
+    with open(output_file_name, 'w') as f:
+        for repo in repos.items():
+            f.write(repo)
+
 
 if __name__ == "__main__":
     all_repos = visit_all_users()
-    output_file_name(all_repos)
+    print(type(all_repos))
+    output_to_file(all_repos)

@@ -27,19 +27,20 @@
 
 - 本地修改之前，先看一下自己的远程仓库界面，如果有"This branch is N commits behind xxx"，说明源项目在这段时间已经进行了若干版本的更新，这时候我们首先要在自己的仓库同步这些更新，然后进行修改。
 ![commits behind](imgs/behind.jpg)
+
     - 逻辑：本地fetch源项目-本地master分支和fetch到的源项目同步-本地master分支推送到远程仓库
     - 步骤：
-    0 git remote add upstream github_address 通过这条指令关联源项目仓库。关联成功后可以使用git remote -v查看到效果。
-    1 git fetch upstream 通过fetch指令将upstream仓库（源项目）的最新内容拉取到本地，它仅仅是拉取，在用户检查之后再决定是否合并到本机分支中；而git pull指令是拉取后直接合并。
-    2 git rebase upstream/master 将拉取下来的upstream版本和本地master合并，这时候本地已经和源仓库同步了，
-    3 git push origin master 将本地已经是最新版本的仓库推送到自己的远程仓库，这时候远程仓库的behind就没有了。
+    0. git remote add upstream github_address 通过这条指令关联源项目仓库。关联成功后可以使用git remote -v查看到效果。
+    1. git fetch upstream 通过fetch指令将upstream仓库（源项目）的最新内容拉取到本地，它仅仅是拉取，在用户检查之后再决定是否合并到本机分支中；而git pull指令是拉取后直接合并。
+    2. git rebase upstream/master 将拉取下来的upstream版本和本地master合并，这时候本地已经和源仓库同步了，
+    3. git push origin master 将本地已经是最新版本的仓库推送到自己的远程仓库，这时候远程仓库的behind就没有了。
 
 - 如果在本地做了错误的提交，并且已经push到了自己的远程仓库，那么需要回滚自己的远程仓库中的提交。这种情况的时候，自己的远程仓库会显示"Your branch is ahead of "origin/master" by N commits."
     - 逻辑：回退本地分支-强制推送到远程分支覆盖它
     - 步骤：
-    1 git log --oneline 查看日志，找到需要回退到的版本的id。
-    2 git reset --hard id 回退到对应id的版本，这时候在本地已经取消了错误的提交。
-    3 git push -f 强制推送到自己的远程仓库分支，将本地回退后的版本覆盖远程的版本，这时候远程仓库的ahead就没有了。
+    1. git log --oneline 查看日志，找到需要回退到的版本的id。
+    2. git reset --hard id 回退到对应id的版本，这时候在本地已经取消了错误的提交。
+    3. git push -f 强制推送到自己的远程仓库分支，将本地回退后的版本覆盖远程的版本，这时候远程仓库的ahead就没有了。
 
 
 ## **10.21 Fork&PR**
