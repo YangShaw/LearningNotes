@@ -5,8 +5,14 @@
 ---
 **Content**
 
-- [添加锚点](#添加锚点)
-- [tips](#tips)
+<!-- TOC -->
+
+- [**添加锚点**](#添加锚点)
+- [**自动生成目录**](#自动生成目录)
+- [**内嵌HTML**](#内嵌html)
+- [**tips**](#tips)
+
+<!-- /TOC -->
 
 ---
 
@@ -19,6 +25,11 @@
     3. 支持汉字，支持数字开头。
     4. 一些特殊的符号要去掉，例如点号"."(如标题 开发工具Android Studio 3.4.1要写成\#开发工具android-studio-341)。
     5. 连接符"\-"不需要替换，直接写。
+
+## **自动生成目录**
+- 在vscode中安装**Markdown TOC**插件后，右键需要添加目录的md文件，选择Markdown TOC：insert/update即可。
+- 遇到问题:自动生成后出现一堆auto的无用字符，这是由于vscode的默认换行符导致的。
+    - 方法：左下角manage图标-settings-搜索eol(end of line)-将换行符从auto改成\n。
 
 ## **内嵌HTML**
 - Markdown中可以通过嵌入html标签对来修改文本的样式等。用法同html语言。直接插入尖括号<>即可。
