@@ -21,3 +21,10 @@
 - 架构
     - probes：不同的源有不同的版本；收集数据，并格式化；
     - platform backend: 
+
+## demo
+
+- 可以直接下载官方release版本压缩包，也可以通过git命令从github上clone下来。选择第一种方式。
+- 下载完解压后，进入bin目录，启动startup.bat即可启动服务。它启动了skywalking-collector和skywalking-webapp两个服务：
+    - collector用于收集信息，但在这个服务的终端里显示了"please initialize the log4j system properly"的内容，猜测是存储信息和日志的部分可能没有配置完全。
+    - webapp就是启动web端的skywalking管理页面，打开本地的8080端口页面就能访问。
