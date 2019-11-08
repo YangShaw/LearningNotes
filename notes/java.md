@@ -153,6 +153,8 @@
 
 # 输入输出流
 
+![javaio](imgs/java-io.png)
+
 ## 关于字节
 - String类型的getBytes()方法，将字符串转成字节数组，字节数组的长度就是字节的个数。
     - getBytes()方法可以加编码格式作为参数，如UTF-8,GBK等。
