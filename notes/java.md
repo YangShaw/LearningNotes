@@ -1,19 +1,22 @@
 
-# Java学习
+**Java学习**
 
 <!-- TOC -->
 
-- [Java学习](#java学习)
-    - [stream](#stream)
-    - [Intermediate operation](#intermediate-operation)
-    - [terminal operation](#terminal-operation)
-    - [生成流](#生成流)
+- [1. stream](#1-stream)
+    - [1.1. Intermediate operation](#11-intermediate-operation)
+    - [1.2. terminal operation](#12-terminal-operation)
+    - [1.3. 生成流](#13-生成流)
+- [输入输出流](#输入输出流)
+    - [关于字节](#关于字节)
+    - [字节操作](#字节操作)
+    - [字符操作](#字符操作)
 
 <!-- /TOC -->
 ---
 
 
-## stream
+# 1. stream
 
 - 将要处理的元素集合看作一种流，流在管道中传输，并可以在管道的节点上进行一步一步、逐级的处理（filter，sort等中间操作），并由最终操作得到前面处理的结果。
 - 中间操作时lazy的，只有最终操作才打开这个流，真正开始流的遍历，生成一个结果，并且将流消耗掉。
@@ -33,7 +36,7 @@
     System.out.println(count);
 ```
 
-## Intermediate operation
+## 1.1. Intermediate operation
 
 - filter()函数对从stream中获得的元素进行过滤，过滤的规则就是传递给filter的参数。这个参数是一个函数，所以这是一个lambda表达式。
     - 这个函数的参数为 cur。
@@ -91,7 +94,7 @@
     int length = Optional.ofNullable(strs.get(1)).map(String::length).orElse(-1);
     ```
 
-## terminal operation
+## 1.2. terminal operation
 
 - forEach() 最终操作，对处理后的每个元素使用方法
     - 如 System.out::println
@@ -101,7 +104,7 @@
 - count() 计数
 - reduce() 
 
-## 生成流
+## 1.3. 生成流
 - iterate是一个类似于reduce的函数，给定一个seed，给定一个func，能够生成seed,f(seed),f(f(seed))的数列。
     ```
     List<Integer> generated = Stream.iterate(2, n->n*2)
@@ -147,3 +150,41 @@
                 }));
 
     ```
+
+# 输入输出流
+
+## 关于字节
+- String类型的getBytes()方法，将字符串转成字节数组，字节数组的长度就是字节的个数。
+    - getBytes()方法可以加编码格式作为参数，如UTF-8,GBK等。
+    - new String()方法可以接收一个字节数组作为参数，用来将字节数组转回字符串格式。同样可以加入一个编码格式作为参数。
+
+## 字节操作
+
+- FileOutputStream 打开一个文件输出流
+    - DataOutputStream 允许按照基本数据类型和字节数组进行读取
+        - 构造方法 接收文件流作为参数，通过data流向文件中输出内容。
+        - write方法 接收字节数组作为参数，写入这个字节数组的内容。如果用这个方法来写入整数，那么会默认只写入一个字节（而int会占用四个字节，从而造成丢失）。还可以增加偏移量和长度参数，用来写入字节数组的某个特定部分。
+        - writeInt方法 写入int型数据。除此之外，这个类还提供写入各种基本数据类型的方法，很方便。
+        
+    - ByteArrayOutputStream 打开一个字节缓存流，但是不直接和文件流对接
+        - write方法 接收字节数组作为参数，同上。但是不提供写入各种数据类型的方法，只能按照字节数组来传入。
+        - writeTo方法 接收一个文件输出流作为参数，把这个字节缓存流的内容写入到文件中。
+    - FileOutputStream 直接在文件流输入
+        - 构造方法 接收文件名称或文件地址作为参数。
+        - write方法 类似前面
+
+- FileInputStream 打开一个文件输入流
+    - DataInputStream
+        - available方法 返回一个整数，检查文件是否读入完成。若返回负数则文件读取结束。
+        - read方法 接收字节数组作为参数，读取响应字节的数据存放到数组中。也可以加入偏移量和长度参数。
+        - readInt方法 读取一个整数。同理还有读取其他数据类型的方法。
+
+## 字符操作
+
+- Writer
+    - FileWriter 打开一个文件，直接写入
+        - write方法 可以写入int，String等，但不能按字节写入。
+        - flush方法 刷新后才写入文件，之前是暂存。
+    - PrintWriter 打开一个文件，直接写入
+        - 直接用print和println方法写，格式和System.out.print相同。
+    
