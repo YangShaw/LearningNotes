@@ -56,3 +56,4 @@
 - Lock和synchronized的选择：
     - 资源竞争激烈时，Lock性能好很多；
     - lock可能会发生死锁。
+
