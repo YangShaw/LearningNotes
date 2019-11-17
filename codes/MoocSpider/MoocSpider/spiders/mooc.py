@@ -26,9 +26,7 @@ class MoocSpider(scrapy.Spider):
     # parse the html content
     def parse(self, response):
         item = MoocspiderItem()
-        # info = response.xpath("//*[@id='app']/div/div[2]/div[2]/div[2]/div/div[2]/div[1]")
 
-        # 找到
         all_course_module = response.xpath("//div[@class='_1gBJC']/div")
         courses = all_course_module.css("._2mbYw")
 
@@ -49,14 +47,6 @@ class MoocSpider(scrapy.Spider):
             item['label'] = label
 
 
-            print('=' * 40)
-            print(university)
-            print(name)
-            print(author)
-            print(num)
-            print(process)
-            print(label)
-            print('=' * 40)
 
             yield item
 

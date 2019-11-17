@@ -26,6 +26,7 @@
 - [CSS 布局](https://learn-the-web.algonquindesign.ca/topics/css-layout-cheat-sheet/)
 - [TypeScript 中文文档](https://typescript.bootcss.com/)
 - [reactstrap 组件](http://reactstrap.github.io/components/alerts/)
+- [Ant Design](https://ant.design/index-cn)
 
 ## 关于 CRA
 
@@ -101,6 +102,8 @@
         <Button color="primary">primay</Button>
         ```
 
+- Ant Design
+
 - eslint 代码检查
 
 - babel js编译
@@ -153,6 +156,10 @@ create-react-app my-app --typescript
 ## 先导知识
 
 - 箭头函数：
+    - 可省略的function关键字；可省略的return关键字；继承当前上下文的this。
+    - 当函数有且仅有一个参数的时候，参数可以不用加括号；
+    - 当函数有且仅有一个表达式的时候，函数体可以省略{}和return。
+
 
   ```
   - (参数1, 参数2, …, 参数N) => { 函数声明 }

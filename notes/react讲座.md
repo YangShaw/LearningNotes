@@ -6,6 +6,8 @@
 - [CRA](#cra)
 - [CSS](#css)
 - [数据请求Axios](#数据请求axios)
+- [项目分析](#项目分析)
+- [新知识](#新知识)
 
 <!-- /TOC -->
 
@@ -65,3 +67,24 @@
 # 数据请求Axios
 - http1.0， 2.0
 - 能够解决数据请求的问题
+
+
+# 项目分析
+
+# 新知识
+- React.SFC stateless functional component 创建一个没有状态
+
+- position： fixed固定，relative， absolute， 
+
+- 设置行高来达到文字垂直居中
+
+- flex是一种很好的布局方法
+
+- 设置最大宽度
+
+- 文章列表：
+
+- nav和footer占了空间，不能挡住正文内容
+
+- webpack
+- babel
