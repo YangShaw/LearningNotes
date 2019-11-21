@@ -1,4 +1,22 @@
 
+符豫
+已在Windows平台成功安装：
+1. JDK
+2. Python
+3. NodeJS
+4. Go
+5. VSCode
+6. IntelliJ IDEA
+7. PyCharm
+8. Sublime Text
+9. Git
+10. Maven
+11. Docker
+12. Postman
+13. Wireshark
+14. MySQL
+15. redis
+
 
 ## 编程语言和框架
 1. JDK
