@@ -10,7 +10,12 @@
 vue-cli是脚手架（create-react-app），全局安装之后，可以执行vue指令。
 
 ## 安装
-- 脚手架vue-cli；
+- 脚手架vue-cli：
+直接用npm或yarn安装遇到了问题，原因是之前安装过cnpm，产生了某种冲突。要用cnpm安装：
+```
+cnpm install -g @vue/cli
+```
+安装后用vue --version查看是否成功。
 - 直接下载vue.js包，并通过script引入；
 
 
