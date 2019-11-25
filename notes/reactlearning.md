@@ -370,6 +370,8 @@ create-react-app my-app --typescript
 ## react路由
 react-router和react-router-dom。react构建单页面应用，实现页面间的跳转需要用到路由功能。
 
+路由匹配也可以模式匹配，想一下之前读bottle源码中的路由。果然知识都是相通的。
+
 
 ## 练习过程
 
