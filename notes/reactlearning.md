@@ -2,15 +2,17 @@
 <!-- TOC -->
 
 - [T0 参考资料](#t0-参考资料)
+- [术语](#术语)
 - [关于 CRA](#关于-cra)
 - [辅助工具](#辅助工具)
 - [开始](#开始)
 - [先导知识](#先导知识)
 - [基础知识](#基础知识)
-- [JSX](#jsx)
+- [JSX和TSX](#jsx和tsx)
 - [组件 Component](#组件-component)
 - [状态 State](#状态-state)
 - [Hooks](#hooks)
+- [react路由](#react路由)
 - [练习过程](#练习过程)
 
 <!-- /TOC -->
@@ -27,6 +29,34 @@
 - [TypeScript 中文文档](https://typescript.bootcss.com/)
 - [reactstrap 组件](http://reactstrap.github.io/components/alerts/)
 - [Ant Design](https://ant.design/index-cn)
+- [ECMAScript介绍](https://en.wikipedia.org/wiki/ECMAScript#Versions)
+- [术语](https://react.docschina.org/docs/glossary.html)
+- [React Router 中文文档](https://react-guide.github.io/react-router-cn/index.html)
+
+## 术语
+- 编译器compiler，打包工具bundler，包管理器package
+js编译器接收js代码，然后将它转换成符合不同es标准的js代码。babel是react的常用编译器。
+
+bundler将成百个js和css文件打包在一起，组合成包。webpack是常用的打包工具。
+
+package管理项目依赖的包，方便整理和下载等。如npm和yarn。
+
+- props和state
+props是组件的外部输入，不可更改，相当于传进来的形参；
+
+state是组件的内部参数，可以用来通过响应网络请求和用户输入来进行相应的修改。
+
+props由父组件传入（父组件调用当前组件，调用的时候传递进来参数），state只属于当前组件。
+
+**不要同步来自于两个不同的组件的state。如果需要，将它提升到这两个组件最近的共同祖先组件中，并将这个state作为props传递到两个组件中。**
+
+- key
+元素数组中，每一个item都应该有一个key作为标识，帮助react来识别出被修改、添加或者删除的item。
+
+要保证在渲染更新后，key是固定不变的。key应该从数据中获得并且对应着唯一固定的标识符。
+
+
+
 
 ## 关于 CRA
 
@@ -226,7 +256,7 @@ create-react-app my-app --typescript
 
 
 
-## JSX
+## JSX和TSX
 
 - return 的 html 元素块就是使用了 jsx 代码。
 - 可用来替代常规 js，是 js 的语法扩展。
@@ -237,14 +267,21 @@ create-react-app my-app --typescript
 ```
 
 - React 元素就是对象/变量/实例，React DOM 确保 React 元素中的内容和页面上的 DOM 内容一致。
+元素一般都是通过组件返回的。我们不会直接使用元素。
+
 - jsx 代码可以放在一个独立的 js 文件中（或直接写成 jsx 文件），然后在 html 中要导入这个 js。
 - jsx 中不能使用 if-else 语句，可以用三目运算符来替代。
   - 内联样式：将 html 元素的某些属性值写成变量的形式。
+- jsx代码中的属性使用驼峰命名法，对比html使用的是全小写。
+- className用来表示类名，为了和html中的class相区分。
+- tsx就是TypeScript对应的相关格式。
 
 ## 组件 Component
 
 - div，a，h1 等标签就是所谓的内置 DOM 组件；
 - 调用自定义组件 < ShoppingList />
+- 定义和设计组件就是设计一些可以重复使用的类/函数/代码块，它们返回要在页面中渲染的react元素，简单的说，就是一个返回react元素的js函数。
+用function，class（extends React.Component）还有示例中使用hook的那种形式都能写组件。
 
 ## 状态 State
 
@@ -256,7 +293,8 @@ create-react-app my-app --typescript
 
 ## Hooks
 
-- 定义：在函数组件中“钩进去”React state 和它的生命周期等特性的函数。Hook 不能在 class 中使用。
+- 定义
+在函数组件中“钩进去”React state 和它的生命周期等特性的函数。Hook 不能在 class 中使用。它的作用本身就是让你在不编写class的情况下使用state以及其他的react特性。
 - state hook
 
   - 如 useState。给它一个参数，作为初始值。[]中的第一个参数是变量名（也可以是一个对象），第二个参数为这个变量指定一个修改它的值的方法。
@@ -327,6 +365,11 @@ create-react-app my-app --typescript
     }, [count]); // 仅在 count 更改时更新
     ```
         - 如果想让effect只运行一次（加载和卸载时运行），可以传递一个空数组[]作为参数。这意味着这个方法不依赖任何state或props，所以它永远不需要重复执行（永远不会检测到更新）。
+
+
+## react路由
+react-router和react-router-dom。react构建单页面应用，实现页面间的跳转需要用到路由功能。
+
 
 ## 练习过程
 
