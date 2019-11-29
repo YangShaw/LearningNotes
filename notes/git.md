@@ -174,7 +174,10 @@ git pull –rebase origin master
 
 1. 在本地用init的方法创建仓库后，使用命令 git remote add origin 远程地址 关联远程仓库。这条指令和后来fork开源项目添加公共仓库的指令 git remote add upstream 开源项目地址 是类似的。这样就理解了remote是关联远程仓库的意思。origin用来标识自己的远程仓库，upstream用来标识fork的项目的源地址。
 
-2. 
+2. 当关联的origin或upstream库迁移之后，需要修改自己本地的remote，指令为：
+```
+git remote set-url origin new-address
+```
 
 
 ## **参考资料**
