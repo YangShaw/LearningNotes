@@ -1,4 +1,10 @@
 
+## 引入
+spring boot是spring框架的扩展，消除了设置spring应用程序所需的xml配置
+
+创建独立的spring应用；嵌入了tomcat，jetty，undertow并且不需要部署；
+
+
 ## 配置文件
 - application.properties或application.yml。后者树状结构，更好用
 
@@ -13,6 +19,8 @@ key和value之间的冒号后面要加一个空格。
 3. Component 表明是一个Java Bean
 
 4. ConfigurationProperties(prefix = "student")  表示获取前缀为 student 的配置信息
+
+5. @SpringBootApplication 程序入口
 
 ## 问题
 1. spring boot Configuration Annotation Proessor not found in classpath
