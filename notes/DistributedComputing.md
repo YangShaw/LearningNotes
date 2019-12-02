@@ -4,16 +4,17 @@ nutch-lucene-hadoop
 
 Hadoop起源于Nutch，最初是Nutch用于网页爬虫和搜索做了一个MapReduce系统，后来独立出来。
 
-Hadoop的组成：
+### Hadoop的组成：
 - MapReduce
 分布式计算的设计结构。
-    - job：一次完整的mapreduce的执行，对应的数据是全部数据集。
-    - task：一次mapreduce在数据集的一个slice上的执行，∑task = job
-    - task attempt
+- job：一次完整的mapreduce的执行，对应的数据是全部数据集。
+- task：一次mapreduce在数据集的一个slice上的执行，∑task = job
+- task attempt
 MR程序由jar包和一个xml文件组成。这个程序被传送到数据所在的各个HDFS上的数据节点。数据仍然是分布在各个节点上。程序可以在任意一个节点提交。
-    - mapper被输送到各个数据节点上进行计算；
-    - 中间结果传输到reducer上进行计算；
-    - 最后的计算结果仍然在HDFS上分布式存储。
+- mapper被输送到各个数据节点上进行计算；
+- 中间结果传输到reducer上进行计算；
+- 最后的计算结果仍然在HDFS上分布式存储。
+
 JobTracker是mapreduce的集中处理点。
 
 TaskTracker端，将资源强制划分成了处理map的节点和处理reduce的节点。当系统中只存在map task或者reduce task的时候，就会造成资源的浪费。
@@ -21,31 +22,33 @@ TaskTracker端，将资源强制划分成了处理map的节点和处理reduce的
 但这样的作用是什么？如果不进行这样的划分,当job量很大的时候，map task多到占用了全部的节点，那么就会造成没有reduce task可以占用的节点来接收map的处理结果，于是map task就无法释放它们占用的节点，造成死锁问题。
 
 Yarn架构：
-    - resource manager用于资源分配，分配task。是一个中心的服务，启动每一个job所属的application manager。为了防止以前监控所有节点心跳信号造成的压力过大，现在不再监控了，分配给application master进行在每个节点上进行监控。相当于把集中的工作给分派下去了。（raid3--raid5）。不要只在一只羊上薅羊毛。
-    - node manager中将jobtracker和tasktracker放在一起
-    - application master
-- HDFS
+- resource manager用于资源分配，分配task。是一个中心的服务，启动每一个job所属的application manager。为了防止以前监控所有节点心跳信号造成的压力过大，现在不再监控了，分配给application master进行在每个节点上进行监控。相当于把集中的工作给分派下去了。（raid3--raid5）。不要只在一只羊上薅羊毛。
+- node manager中将jobtracker和tasktracker放在一起
+- application master
+
+### HDFS
 分布式文件系统，包括namenode，datanode那一套内容，以及文件系统的相应命令行操作和接口。设计结构类似于GFS。
     - 运行机制：读写文件的流程
 
-- HBase
+### HBase
 专门设计来针对分布式数据存储需求的数据库。
 
 这里面的一行包括一个行键，但不是每一行都要对应所有的列。
-    - 每行数据有一个可排序的id，和任意的列item
-    - 表内的数据非常稀疏，不同的行，可以对应数目完全不同的列。这是为了应对大数据下数据很稀疏的情况。
-    - 可以只对一行加锁。对行的写操作始终是原子的。
-    - 多个列可以属于一个列族。一个族代表描述实体的一个侧面（同一类性质的属性），为了细分，一个列族中可以再分成多个标签，但属于同一个列族的标签要连续存储。
+- 每行数据有一个可排序的id，和任意的列item
+- 表内的数据非常稀疏，不同的行，可以对应数目完全不同的列。这是为了应对大数据下数据很稀疏的情况。
+- 可以只对一行加锁。对行的写操作始终是原子的。
+- 多个列可以属于一个列族。一个族代表描述实体的一个侧面（同一类性质的属性），为了细分，一个列族中可以再分成多个标签，但属于同一个列族的标签要连续存储。
 
 数据库表可以做到无限多列，无限多行，为了能够存储这些内容，我们需要让这个表可以切分存储。主节点Master Server，数据存储在Region Server中【这种一主多辅的设计模式在分布式中貌似非常普遍】。每个region包含一个id，区域内的行按照行键有序排列。表按照水平的方式，划分成一个或多个区域。区域就可以分布式存储了。
 
 最初每张表包含一个区域，随着表的增长，来增加区域。
-- ZooKeeper
-- Pig
+
+### ZooKeeper
+### Pig
     - Pig Latin 数据流编程语言，是对输入的一步步操作，每一步是对数据进行一个简单变换（流式语言）
         - 相比下，sql是一种描述性的编程语言，是一种约束性集合。
     - 还包括对Pig的运行平台。
-- Hive
+### Hive
 
 
 ## 消息队列
