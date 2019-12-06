@@ -11,13 +11,22 @@
     - [2.1. 关于字节](#21-关于字节)
     - [2.2. 字节操作](#22-字节操作)
     - [2.3. 字符操作](#23-字符操作)
-- [java annotation](#java-annotation)
-    - [介绍](#介绍)
-    - [举例](#举例)
-    - [自定义annotation](#自定义annotation)
-    - [元Annotation](#元annotation)
-    - [对象注入到方法或成员变量中](#对象注入到方法或成员变量中)
-    - [总结](#总结)
+- [3. java annotation](#3-java-annotation)
+    - [3.1. 介绍](#31-介绍)
+    - [3.2. 举例](#32-举例)
+    - [3.3. 自定义annotation](#33-自定义annotation)
+    - [3.4. 元Annotation](#34-元annotation)
+    - [3.5. 对象注入到方法或成员变量中](#35-对象注入到方法或成员变量中)
+    - [3.6. 总结](#36-总结)
+- [4. 反射](#4-反射)
+    - [4.1. Class 访问类](#41-class-访问类)
+    - [4.2. Field 访问字段](#42-field-访问字段)
+    - [4.3. Method 访问方法](#43-method-访问方法)
+    - [4.4. Constructor 访问构造方法](#44-constructor-访问构造方法)
+    - [4.5. 获得继承关系和实现接口](#45-获得继承关系和实现接口)
+    - [4.6. 动态代理](#46-动态代理)
+- [5. 序列化](#5-序列化)
+    - [5.1. toJson](#51-tojson)
 
 <!-- /TOC -->
 ---
@@ -231,4 +240,90 @@ demo
 ## 3.6. 总结
 - 步骤：得到想要注入的对象属性，通过属性得到注解的信息，通过属性的写方法将注解的信息注入到对象上，最后将对象赋给类。
 - 作用：让编译器检查代码，将数据注入到方法、成员变量、类上。
+
+# 4. 反射
+**Reflection**
+反射是Java给我们提供的，为了解决在运行期，对某个实例一无所知的情况下，如何调用它的方法的一种方式。
+例如，我们知道Person p，那么可以调用它的getPersonName()，但如果只有一个Object p，在不知道Person类的情况下（也就是不能强制类型转换使用(Person)p),怎样调用getPersonName()。
+
+## 4.1. Class 访问类
+各种类class的本质是Class类。每加载一种class， JVM就为其创建一个Class类型的实例。例如，当加载String类时，创建：
+```
+Class cls = new Class(String);
+```
+JVM为每个加载的class创建它对应的Class实例，并在实例中保存了这个class的所有信息（类名，包名，extends和implements，方法，字段）。所以只要得到某个Class实例，我们也就得到了和这个实例对应的class的所有信息。
+
+反射：通过Class实例获得class信息的方法。
+
+- 通过某个class的静态变量
+```
+Class cls = String.class
+```
+想想安卓的intent中的(MainActivity.this, SecondActivity.class)。
+- 有一个实例变量的时候
+```
+String s = "hello world";       
+Class cls = s.getClass();
+```
+所以，当我们遇到前面所说的，只知道一个Object o实例的情况下，就可以使用o.getClass()来获得这个实例的类型。
+- 知道类的完整类名
+```
+Class cls = Class.forName("java.lang.String");
+```
+想想Java大作业中的那个困扰了我一下的Class.forName方法。
+
+以上三种方法给我们的启示是，我们可以通过一个已存在的实例来确定它的类别，也可以根据字符串来确定它的类别（这很强大）。
+
+- 对比instanceof
+通常情况下使用instanceof来判断数据类型。这个关键字不但匹配指定的类型，还匹配该类型的子类。
+- 动态加载
+JVM执行Java程序时候，并不是一次性将所有的class都加载到内存中，而是第一次需要用到class的时候才加载。利用这个特点，我们可以在运行期根据条件加载不同的实现类。
+
+## 4.2. Field 访问字段
+通过Field来访问类中的字段，然后可以利用getName, getType, getModifiers来得到字段的相关信息。
+
+通过setAccessible来获得对private字段的访问权限。
+
+通过set来修改字段的值。
+
+## 4.3. Method 访问方法
+通过Method来访问类中的字段，getMethod(name, Class..)
+
+利用getName, getReturnType, getParameterTypes, getModifiers等来获得方法的相关信息。
+
+## 4.4. Constructor 访问构造方法
+使用newInstance只能调用类的public无参构造方法。
+使用下面的代码可以任意调用：
+```
+Constructor cons1 = Integer.class.getConstructor(int.class);
+Integer n1 = (Integer)cons1.newInstance(123);
+
+```
+
+## 4.5. 获得继承关系和实现接口
+通过getSuperclass和getInterfaces
+
+## 4.6. 动态代理
+
+
+
+
+
+# 5. 序列化
+
+## 5.1. toJson
+需要解决的两类问题：json字段和JavaBean中的属性名不一致（驼峰命名法 < -- > 蛇形命名法）；部分属性不需要序列化。
+- @SerializedName
+相当于起别名，默认的value填写json字段的名称。也就是在序列化或反序列化时字段的期望名称。
+
+- @Expose
+用来表示是否显示某个属性。有两个值serialize和deserialize。默认是true，即显示。
+
+使用expose注解，在生成Gson对象的时候需要用：
+```
+Gson excludeGson = new GsonBuilder().excludeFieldWithoutExposeAnnotation().create;
+```
+
+
+
 

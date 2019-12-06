@@ -83,3 +83,5 @@ springframework.data库中提供了一些模型，如和分页相关的Page，Pa
 - security 关于安全的一些设置
 - validator 关于验证的一些配置
 
+
+## 前端架构
