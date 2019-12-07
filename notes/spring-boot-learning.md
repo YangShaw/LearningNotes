@@ -3,24 +3,22 @@
 
 <!-- TOC -->
 
-- [1. 第一部分](#1-第一部分)
-    - [1.1. 登录注册模块](#11-登录注册模块)
-        - [1.1.1. 项目结构](#111-项目结构)
-        - [1.1.2. 后端代码](#112-后端代码)
-            - [1.1.2.1. controller](#1121-controller)
-            - [1.1.2.2. repository](#1122-repository)
-            - [1.1.2.3. service](#1123-service)
+- [1. 登录注册模块](#1-登录注册模块)
+    - [1.1. 项目结构](#11-项目结构)
+    - [1.2. 后端代码](#12-后端代码)
+        - [1.2.1. controller](#121-controller)
+        - [1.2.2. repository](#122-repository)
+        - [1.2.3. service](#123-service)
 
 <!-- /TOC -->
 
 
-# 1. 第一部分
 
-## 1.1. 登录注册模块
+# 1. 登录注册模块
 
 - [Demo地址](https://github.com/YangShaw/SpringBootLearning/tree/master/springbootlogin)
 
-### 1.1.1. 项目结构
+## 1.1. 项目结构
 - 后端代码
     - controller：配置路由关系
     - model：定义实体（如User）
@@ -33,9 +31,9 @@
     - pom.xml：maven的配置文件，通过在该文件中添加依赖库来自动下载和导入需要用到的jar包
     - application.yaml：项目的配置文件，存放一些配置信息。自动生成的为application.properties格式；yaml格式以树状显示，更简洁明了一些。
 
-### 1.1.2. 后端代码
+## 1.2. 后端代码
 
-#### 1.1.2.1. controller
+### 1.2.1. controller
 给类增加@Controller注解来标记之。
 
 给方法增加@RequestMapping注解来响应一个http请求，请求的内容是该注解的value值。例如下面的例子表示当请求"/myrequest"的时候，我们响应这个请求的函数是myResponse。
@@ -53,7 +51,7 @@ public String myResponse(){
 
 如果要响应表单提交，只需要响应表单的action属性中的请求就可以了。
 
-#### 1.1.2.2. repository
+### 1.2.2. repository
 使用jpa连接数据库，maven配置为：
 ```
 <dependency>
@@ -73,7 +71,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
 
-#### 1.1.2.3. service
+### 1.2.3. service
 调用对应repository中对数据库的操作方法，来实现业务逻辑。例如上面说的根据用户名来获得用户信息的逻辑：
 ```
 @Service
