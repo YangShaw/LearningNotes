@@ -1,46 +1,82 @@
 
-## 引入
-spring boot是spring框架的扩展，消除了设置spring应用程序所需的xml配置
-
-创建独立的spring应用；嵌入了tomcat，jetty，undertow并且不需要部署；
+**Spring Boot学习笔记**
 
 
-## 配置文件
-- application.properties或application.yml。后者树状结构，更好用
+## 登录注册模块
 
-- application.yml:
-key和value之间的冒号后面要加一个空格。
+- [Demo地址](https://github.com/YangShaw/SpringBootLearning/tree/master/springbootlogin)
 
-## Annotation
-1. Autoweird 自动注入
+### 项目结构
+- 后端代码
+    - controller：配置路由关系
+    - model：定义实体（如User）
+    - repository：接口类，给每个实体声明需要用到的访问数据库的操作
+    - service：调用repository中的接口来实现业务逻辑（如注册新用户）
+- 前端代码
+    - static：存放依赖的js、css库以及图片、字体等
+    - templates：存放前端页面
+- 配置文件
+    - pom.xml：maven的配置文件，通过在该文件中添加依赖库来自动下载和导入需要用到的jar包
+    - application.yaml：项目的配置文件，存放一些配置信息。自动生成的为application.properties格式；yaml格式以树状显示，更简洁明了一些。
 
-2. RequestMapping 映射url
+### 后端代码
 
-3. Component 表明是一个Java Bean
+#### controller
+给类增加@Controller注解来标记之。
 
-4. ConfigurationProperties(prefix = "student")  表示获取前缀为 student 的配置信息
-
-5. @SpringBootApplication 程序入口
-
-## 问题
-1. spring boot Configuration Annotation Proessor not found in classpath
-在使用注解@ConfigurationProperties时出现，解决方法是通过maven引入依赖：
+给方法增加@RequestMapping注解来响应一个http请求，请求的内容是该注解的value值。例如下面的例子表示当请求"/myrequest"的时候，我们响应这个请求的函数是myResponse。
 ```
-<dependency>
-   <groupId> org.springframework.boot </groupId>
-   <artifactId> spring-boot-configuration-processor </artifactId>
-   <optional> true </optional>
-</dependency>
-
+@RequestMapping("/myrequest")
+public String myResponse(){
+    return "hello world"
+    //  return "index"
+}
 ```
-- [参考资料](https://blog.csdn.net/w05980598/article/details/79167826)
 
-2. 热部署
-需要添加如下依赖，并且还要在IDEA上做相关的[配置](https://blog.csdn.net/feinifi/article/details/82771650)。这个还没尝试过。暂时用不到。
+如果没有使用thyme leaf模板，那么这里返回一个字符串hello world就会直接在界面上显示这个内容；如果配置了模板，那么它会去寻找字符串对应的页面，如return "index"会找到classpath路径下的index.html文件。
+
+对每个请求都配置相应的Controller处理器（同一个Controller类中可以处理多个请求），就能满足入门的响应请求的需求了。
+
+如果要响应表单提交，只需要响应表单的action属性中的请求就可以了。
+
+#### repository
+使用jpa连接数据库，maven配置为：
 ```
 <dependency>
     <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-devtools</artifactId>
-    <optional>true</optional> <!-- 这个需要为 true 热部署才有效 -->
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
 </dependency>
 ```
+
+对每个实体都创建对应的操作数据库的repository接口类，继承自JpaRepository。JPA提供一系列封装好的操作数据库的方法，如根据实体的属性名进行find等。这里只声明了一个根据UserName（对应User类中的属性userName）进行查找的方法。
+```
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUserName(String userName);
+}
+```
+
+#### service
+调用对应repository中对数据库的操作方法，来实现业务逻辑。例如上面说的根据用户名来获得用户信息的逻辑：
+```
+@Service
+public class UserServiceImpl implements UserService {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUserName(userName);
+    }
+}
+```
+注意：给service类增加注解@Service；通过自动注入的方式@Autowired来创建UserRepository的对象；这里我是先定义了一个接口UserService来声明要用到的方法，然后在UserServiceImpl中实现之，事实上也可以不要这个接口。
+
+
+
+
+
