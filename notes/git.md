@@ -15,6 +15,13 @@
 
 ---
 
+## **3.5 开发周期** 
+- 本地使用dev分支进行开发，开发后push到自己的远程仓库；
+- 通过提交PR将push到origin的dev分支合并到upstream的master分支；
+- 通过fetch那一系列的操作将upstream更新后的master分支同步到本地的master分支，这时候本地master分支是最新的；
+- 将本地master分支push到自己的origin远程仓库；
+- 删除本地和远程仓库中的dev分支。
+
 ## **10.30 使用github desktop**
 
 - github提供了桌面客户端，功能类似于各种IDE中通过图形化界面对项目进行commit和push的那些插件，它用来管理自己的github仓库。可以通过add existing repository将本地已经创建好的仓库(含有git配置信息，进行过git init或git clone)添加到这个客户端，之后就可以在这个图形化界面中查看changed files，查看log history，以及提交commit和push。
