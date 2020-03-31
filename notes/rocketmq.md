@@ -52,6 +52,21 @@
     - [至少一次](#%e8%87%b3%e5%b0%91%e4%b8%80%e6%ac%a1)
     - [回溯消费](#%e5%9b%9e%e6%ba%af%e6%b6%88%e8%b4%b9)
     - [事务消息](#%e4%ba%8b%e5%8a%a1%e6%b6%88%e6%81%af)
+    - [定时消息](#%e5%ae%9a%e6%97%b6%e6%b6%88%e6%81%af)
+    - [消息重试](#%e6%b6%88%e6%81%af%e9%87%8d%e8%af%95)
+    - [消息重投](#%e6%b6%88%e6%81%af%e9%87%8d%e6%8a%95)
+    - [流量控制](#%e6%b5%81%e9%87%8f%e6%8e%a7%e5%88%b6)
+      - [生产者流量控制](#%e7%94%9f%e4%ba%a7%e8%80%85%e6%b5%81%e9%87%8f%e6%8e%a7%e5%88%b6)
+      - [消费者流量控制](#%e6%b6%88%e8%b4%b9%e8%80%85%e6%b5%81%e9%87%8f%e6%8e%a7%e5%88%b6)
+    - [死信队列](#%e6%ad%bb%e4%bf%a1%e9%98%9f%e5%88%97)
+  - [架构设计](#%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1)
+    - [技术架构](#%e6%8a%80%e6%9c%af%e6%9e%b6%e6%9e%84)
+      - [Producer](#producer)
+      - [Consumer](#consumer)
+      - [NameServer](#nameserver)
+      - [BrokerServer](#brokerserver)
+    - [部署架构](#%e9%83%a8%e7%bd%b2%e6%9e%b6%e6%9e%84)
+      - [网络部署](#%e7%bd%91%e7%bb%9c%e9%83%a8%e7%bd%b2)
 
 <!-- /TOC -->
 
@@ -293,7 +308,99 @@ Tag是过滤的一种条件，也可以自定义过滤的条件。
 Broker在向Consumer投递成功消息后，消息仍然需要保留。重新消费一般都是按照时间维度。RocketMQ支持按照时间回溯消费，精确到ms。
 
 ### 事务消息
-Transactional Message是指
+Transactional Message是指应用本地事务和发送消息操作可以被定义到全局事务中。
+
+### 定时消息
+延迟队列中的消息会在定时的delay之后被投递给topic。在broker中配置它的属性messageDelayLevel（这不是topic的属性）。当level==0的时候是非延迟消息。
+
+定时消息会暂存在与目标topic对应的临时topic中，并且会根据延迟级别存入对应的queue中。每个queue中只存放相同延迟的消息，从而确保具有相同发送延迟的消息能够被顺序消费。broker会调度的消费这些临时topic中的队列，来把消息写入真实的topic。
+
+如果发送定时消息，那么有存入临时topic和真实topic两次写入过程，都会计数，所以发送数量、tps都会变高。
+
+### 消息重试
+Consumer消费失败的两种情况:
+- 消息本身的原因导致消费失败（反序列化错误，消息数据错误）；此时跳过这条消息，再消费其他消息；当前消息定时重试，如延时10s；
+- 依赖的下游应用服务不可用导致消费失败（例如db连接错误，外系统网络错误等）；此时其他的消息一般也不能消费，所以让应用休眠30s，从而减轻broker重试消息的压力。
+
+重试的消息会存放在重试队列。重试队列针对ConsumerGroup而设立，而非topic。
+
+### 消息重投
+生产者发送消息的时候，同步消息发送失败会重投；异步消息发送失败会重试；oneway没有任何保证。
+
+消息重投能保证消息尽可能的发送成功、不丢失，但可能造成消息重复。一般，在消息量大、网络抖动时，消息重复就是大概率事件。另外，Producer主动重发、Consumer负载变化也会导致重复消息。
+
+重投策略：
+
+### 流量控制
+
+#### 生产者流量控制
+因为broker处理能力达到瓶颈。生产者的流控，不会尝试消息重投。
+- commitLog文件被锁超时
+- broker为异步刷盘的主机，且……
+- broker每隔10ms检查send请求队列头部请求的等待时间
+- broker通过拒绝send请求方式实现流量控制
+  
+#### 消费者流量控制
+因为消费能力达到瓶颈。消费者流控的结果是降低拉取消息的频率。
+- 消费者本地缓存消息数超过拉取的阈值
+- 消费者本地缓存消息的大小超过阈值
+- 消费者本地缓存消息的跨度超过阈值
+
+### 死信队列
+消息消费失败，会进行消息重试；
+
+达到最大重试次数，则表明消费者在正常情况下无法正确的消费该消息。这类消息被称为死信消息（Dead-Letter Message）。
+
+
+## 架构设计
+
+### 技术架构
+
+#### Producer
+支持分布式集群方式部署。通过MQ的负载均衡模块选择相应的Broker集群队列进行消息投递，投递的过程支持快速失败并且低延迟。
+
+#### Consumer
+支持分布式集群方式部署。两种消费模式pull, push。支持集群和广播方式的消费，提供实时的消息订阅机制。
+
+#### NameServer
+是一个对topic路由信息的注册中心，支持Broker的动态注册与发现。类似于zookeeper在Dubbo中的功能。
+- 管理Broker，接收Broker集群的注册信息，并保存下来作为路由信息的基本数据，提供心跳检测机制，检查Broker的存活情况
+- 路由信息管理，每个NameServer会保存关于Broker集群的整个路由信息，和用于客户端查询的队列信息。
+
+Producer和Consumer通过查询NameServer来知道去哪个Broker中找到需要的路由信息（目标消息在何处），来进行消息的投递和消费。
+
+每个NameServer实例上都保存完整的路由信息，属于集群部署的。
+
+#### BrokerServer
+Broker负责消息的存储、投递、查询和服务的高可用性。包含子模块：
+- Remoting Module：整个Broker的实体，负责处理来自客户端的请求。
+- Client Manager：管理客户端（包括Producer和Consumer）和维护Consumer的topic订阅信息
+- Store Service：提供API接口，来方便消息存储到物理硬盘，以及查询消息
+- HA Service：提供Master Broker和Slave Broker之间的数据同步功能
+- Index Service：根据特定的Message Key对投递到Broker的消息进行索引服务，便于快速查询
+
+<!-- ![部署架构](https://github.com/apache/rocketmq/blob/master/docs/cn/image/rocketmq_architecture_3.png) -->
+
+### 部署架构
+
+#### 网络部署
+- NameServer
+
+无状态的节点，集群部署
+- Broker
+
+Master和Slave节点是一对多的关系。对应的一组，BrokerName相同，BrokerId为0的是Master节点，其余为Slave节点。
+
+每个Broker与NameServer集群中的**所有节点**都建立长连接，定时注册topic信息到所有的NameServer。
+- Producer
+
+与**随机一个**NameServer中的节点建立长连接，定期从中获取topic的路由信息；
+
+向提供topic服务的Master节点建立长连接，定期发送心跳；
+
+Producer节点是无状态的，可以集群部署。
+
+- Consumer
 
 
 
