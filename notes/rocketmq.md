@@ -67,6 +67,16 @@
       - [BrokerServer](#brokerserver)
     - [部署架构](#%e9%83%a8%e7%bd%b2%e6%9e%b6%e6%9e%84)
       - [网络部署](#%e7%bd%91%e7%bb%9c%e9%83%a8%e7%bd%b2)
+  - [设计-消息存储](#%e8%ae%be%e8%ae%a1-%e6%b6%88%e6%81%af%e5%ad%98%e5%82%a8)
+    - [消息存储整体架构](#%e6%b6%88%e6%81%af%e5%ad%98%e5%82%a8%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84)
+- [部署笔记](#%e9%83%a8%e7%bd%b2%e7%ac%94%e8%ae%b0)
+  - [quick start](#quick-start)
+    - [安装包](#%e5%ae%89%e8%a3%85%e5%8c%85)
+    - [demo运行](#demo%e8%bf%90%e8%a1%8c)
+    - [问题解决](#%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3)
+    - [一些指令](#%e4%b8%80%e4%ba%9b%e6%8c%87%e4%bb%a4)
+      - [nohup](#nohup)
+      - [tail](#tail)
 
 <!-- /TOC -->
 
@@ -402,6 +412,83 @@ Producer节点是无状态的，可以集群部署。
 
 - Consumer
 
+
+## 设计-消息存储
+
+提纲：
+- 消息存储整体架构
+- PageCache与Mmap内存映射
+- 两种刷盘方式
+
+### 消息存储整体架构
+
+
+
+
+# 部署笔记
+
+## quick start
+> 文档：https://rocketmq.apache.org/docs/quick-start/
+
+### 安装包
+- JDK 1.8
+- Git
+- Maven
+
+1. 官网下载Maven最新版本
+
+2. 安装在/usr/local/文件夹中
+
+  解压指令：
+  ```shell
+  tar -zxvf [filename]
+  ```
+3. 添加环境变量
+  打开配置文件
+  ```shell
+  vim /etc/profile
+  ```
+  增加路径
+  ```
+  MAVEN_HOME=/usr/local/maven/apache-maven-3.6.3
+  export PATH=${MAVEN_HOME}/bin:${PATH}
+  ```
+  执行
+  ```shell
+  source /etc/profile
+  ```
+
+### demo运行
+根据文档中的步骤执行example的Producer和Consumer
+
+### 问题解决
+- Broker.log文件不存在
+
+1. 需要安装jdk，并配置JAVA_HOME环境变量。之前系统预装的openjdk不靠谱。
+
+参见 https://blog.csdn.net/weixin_38384296/article/details/102883108
+
+2. 服务器的内存资源不足以支持RocketMQ的默认配置，需要修改两个配置文件：
+
+参见 https://blog.csdn.net/weixin_38384296/article/details/102884039 中的[其他]部分。
+
+### 一些指令
+
+#### nohup
+no hang up 不挂断，执行的指令在终端关闭后仍会运行。
+
+& 是在后台运行的意思。但当用户挂起的时候，命令自动也跟着退出。
+
+执行命令后，显示：
+```shell
+nohup: input and appending output to ‘nohup.out’
+```
+
+#### tail
+显示文件最尾部的内容
+```shell
+tail -f [filename]
+```
 
 
 
