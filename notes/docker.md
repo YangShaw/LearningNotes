@@ -17,6 +17,8 @@
 ## 我常用的
 - 容器启动后，即使关闭终端，容器也仍在运行。
 
+- 启动后，使用exit来退出容器
+
 - splash：
     ```
     docker run -p 8050:8050 scrapinghub/splash
@@ -25,4 +27,3 @@
     local nextpage = splash:select("._3YiUU ")[1]
     nextpage:click()
     splash:wait(3)
-    

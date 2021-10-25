@@ -92,3 +92,30 @@ public class UserServiceImpl implements UserService {
 
 
 
+
+
+## 一句话介绍
+
+- 基于POJO轻量级和最小侵入式开发
+- 通过**依赖注入**和**面向接口**来实现松耦合
+- 基于切面和惯例进行声明式编程
+- 通过切面和模板来减少样板式代码
+
+## 非侵入式
+
+不需要实现特定的接口、继承特定的类，也就是不需要修改现有类的结构就能够增强JavaBean的功能。
+
+## 松耦合
+
+之前，面向接口编程，通过DaoFactory等方法来实现松耦合
+
+工厂类
+
+DAO层和service层通过DaoFactory来实现松耦合。
+
+spring通过IOC控制反转的方法来实现松耦合。
+
+## 面向切面编程 AOP
+
+动态代理+注解 给service层的方法添加权限
+
